@@ -98,3 +98,34 @@ function moveInvaders(){
 }
 
 invaderId = setInterval(moveInvaders, 650)
+
+function shoot(e) {
+    let laserId
+    let currentLaserIndex = currentShooterIndex
+
+    function moveLaser() {
+        squares[currentLaserIndex].classList.remove('laser')
+        currentLaserIndex -= width
+        squares[currentLaserIndex].classList.add('laser')
+
+        if (squares[currentLaserIndex].classList.contains('invader')) {
+            squares[currentLaserIndex].classList.remove('laser')
+            squares[currentLaserIndex].classList.remove('invader')
+            squares[currentLaserIndex].classList.add('boom')
+
+            setTimeout(() => squares[currentLaserIndex].classList.remove('boom'), 300)
+            clearInterval(laserId)
+
+            const alienRemoved = spaceInvaders.indexOf(currentLaserIndex)
+            aliensRemoved.push(alienRemoved)
+            resultsDisplay.innerHTML = aliensRemoved.length
+        }
+    }
+
+    switch(e.key) {
+        case 'ArrowUp':
+            laserId = setInterval(moveLaser, 100)
+    }
+}
+
+document.addEventListener('keydown', shoot)
