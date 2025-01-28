@@ -1,7 +1,10 @@
 const squares = document.querySelectorAll('.grid div'); 
 const result = document.querySelector('#result'); 
 const displayCurrentPlayer = document.querySelector('#current-player'); 
-let currentPlayer = 1; 
+let currentPlayer = 1; // Player 1 starts
+
+// Track columns for where the piece should fall (starting from the bottom)
+const columnHeight = [5, 5, 5, 5, 5, 5, 5]; // 7 columns, each has a height (row)
 
 const winningArrays = [
     [0, 1, 2, 3],
@@ -77,60 +80,56 @@ const winningArrays = [
 
 function checkBoard() {
     for (let i = 0; i < winningArrays.length; i++) {
-        const square1 = squares[winningArrays[i][0]];
-        const square2 = squares[winningArrays[i][1]];
-        const square3 = squares[winningArrays[i][2]];
-        const square4 = squares[winningArrays[i][3]];
-
+        const [a, b, c, d] = winningArrays[i];
         if (
-            square1.classList.contains('player-one') &&
-            square2.classList.contains('player-one') &&
-            square3.classList.contains('player-one') &&
-            square4.classList.contains('player-one')
+            squares[a].classList.contains('player-one') &&
+            squares[b].classList.contains('player-one') &&
+            squares[c].classList.contains('player-one') &&
+            squares[d].classList.contains('player-one')
         ) {
-            result.textContent = 'Player 1 Wins!';
-            setTimeout(() => {
-                location.reload()
-               }, 2000);
-               
+            setTimeout(() => alert('Player 1 Wins!'), 100);
+            setTimeout(() => location.reload(), 200);
             return;
         }
-
         if (
-            square1.classList.contains('player-two') &&
-            square2.classList.contains('player-two') &&
-            square3.classList.contains('player-two') &&
-            square4.classList.contains('player-two')
+            squares[a].classList.contains('player-two') &&
+            squares[b].classList.contains('player-two') &&
+            squares[c].classList.contains('player-two') &&
+            squares[d].classList.contains('player-two')
         ) {
-            result.textContent = 'Player 2 Wins!';
-            setTimeout(() => {
-                location.reload()
-               }, 2000);
-               
-            return; 
+            setTimeout(() => alert('Player 2 Wins!'), 100);
+            setTimeout(() => location.reload(), 200);
+            return;
         }
     }
 }
 
-for (let i = 0; i < squares.length; i++) {
-    squares[i].onclick = () => {
-        if (
-            i + 7 < squares.length &&
-            squares[i + 7].classList.contains('taken') &&
-            !squares[i].classList.contains('taken')
-        ) {
-            squares[i].classList.add('taken');
+function dropPiece(colIndex) {
+    const row = columnHeight[colIndex];
+    if (row >= 0) {
+        const square = squares[colIndex + (row * 7)];
+        if (!square.classList.contains('taken')) {
+            square.classList.add('taken');
             if (currentPlayer === 1) {
-                squares[i].classList.add('player-one');
+                square.classList.add('player-one');
                 currentPlayer = 2;
             } else {
-                squares[i].classList.add('player-two');
+                square.classList.add('player-two');
                 currentPlayer = 1;
             }
             displayCurrentPlayer.textContent = currentPlayer;
+            columnHeight[colIndex]--;
             checkBoard();
         } else {
-            alert('You cannot place a piece here!');
+            alert('Column is full!');
         }
-    };
+    }
+}
+
+// Add event listeners for each column
+for (let i = 0; i < 7; i++) {
+    const columnDivs = Array.from(squares).filter((_, index) => index % 7 === i);
+    columnDivs.forEach(div => {
+        div.addEventListener('click', () => dropPiece(i));
+    });
 }
