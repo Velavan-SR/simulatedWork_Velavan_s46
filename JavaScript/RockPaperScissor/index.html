@@ -4,25 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Device Choice : <span id="dev-in"></span></h2>
-    
-    <h2>Your Choice : <span id="user-in"></span></h2>
-    
-    <h2>Result : <span id="res"></span></h2>
+    <div class="container">
+        <h1>Rock Paper Scissors</h1>
+        <h2>Device Choice: <span id="dev-in"></span></h2>
+        <h2>Your Choice: <span id="user-in"></span></h2>
+        <h2>Result: <span id="res"></span></h2>
 
-    <div>
-        <button onclick="changeUserInp(event)">Rock</button>
-        <button onclick="changeUserInp(event)">Paper</button>
-        <button onclick="changeUserInp(event)">Scissor</button>
+        <div id="buttons" class="button-group hidden">
+            <button onclick="changeUserInp(event)">Rock</button>
+            <button onclick="changeUserInp(event)">Paper</button>
+            <button onclick="changeUserInp(event)">Scissor</button>
+        </div>
+
+        <div id="start-btn">
+            <button onclick="startGame()">Start Game</button>
+        </div>
+
+        <h2>Device's Score: <span id="dev-sc">0</span></h2>
+        <h2>Your Score: <span id="user-sc">0</span></h2>
+
+        <div id="play-again" class="hidden">
+            <button onclick="reset()">Play Again</button>
+        </div>
     </div>
 
-    <h2>Device's Score : <span id="dev-sc">0</span></h2>
-    <h2>Your Score : <span id="user-sc">0</span></h2>
-
-    <button onclick="reset()">Reset</button>
-
+    <script src="app.js"></script>
 </body>
-<script src="app.js"></script>
 </html>
